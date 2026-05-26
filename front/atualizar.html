@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<div class="form-container">
+    <h2>Atualizar usuario</h2>
+    <form id="form-atualizar" action="../back/atualizar.php" method="post">
+    <div class="input-group">
+      <label for="nome">Nome: </label>
+      <input type="text" nome="nome" id="nome" required />
+    </div>
+
+    <div class="input-group">
+      <label for="email">Email: </label>
+      <input type="email" nome="email" id="email" required />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">Salvar</button>
+      <button
+        class="btn-secudary"
+        onclick="window.location.href = '../index.html'"
+      >
+        Voltar
+      </button>
+    </div>
+  </form>
+  <script src="atualizar.js"></script>
+</body>
+</html>

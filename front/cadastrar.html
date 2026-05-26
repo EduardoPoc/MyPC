@@ -1,0 +1,25 @@
+<div class="form-container">
+  <h2>Cadastrar</h2>
+  <form id="form-cadastro" action="../back/cadastro.php" method="post">
+    <div class="input-group">
+      <label for="nome">Nome: </label>
+      <input type="text" nome="nome" id="nome" required />
+    </div>
+
+    <div class="input-group">
+      <label for="email">Email: </label>
+      <input type="email" nome="email" id="email" required />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">Salvar</button>
+      <button
+        class="btn-secudary"
+        onclick="window.location.href = '../index.html'"
+      >
+        Voltar
+      </button>
+    </div>
+  </form>
+</div>
+<script src="cadastrar.js"></script>
