@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="img/logo.png" />
     <title>My Best PC</title>
   </head>
   <body>
@@ -30,7 +31,12 @@
 
     <nav>
       <div class="login">
-        <img src="img/avatar.png" alt="Login" />
+        <button
+          onclick="window.location.href = 'front/cadastrar.html'"
+          id="novo"
+        >
+          <img src="img/avatar.png" alt="Login" />
+        </button>
       </div>
 
       <div class="pesquisa">
@@ -90,6 +96,6 @@
       </main>
     </div>
 
-    <script src="script.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>
