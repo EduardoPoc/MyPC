@@ -1,0 +1,279 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #262626;
+  color: white;
+}
+
+/* ── HEADER ── */
+header {
+  background-color: #b80404;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.nome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nome h1 {
+  font-size: clamp(1rem, 2.5vw, 2rem);
+  white-space: nowrap;
+}
+
+.nome img {
+  width: clamp(30px, 5vw, 60px);
+}
+
+.options figure {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.options img {
+  width: clamp(20px, 3vw, 35px);
+  cursor: pointer;
+}
+
+#settings {
+  width: clamp(20px, 3vw, 35px);
+  cursor: pointer;
+}
+
+/* ── NAV ── */
+nav {
+  margin: 5px;
+  background-color: #b80404;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  gap: 10px;
+}
+
+.pesquisa {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 55%;
+}
+
+.pesquisa select {
+  padding: 6px 10px;
+  background: #1a1a1a;
+  color: white;
+  border: 2px solid white;
+  border-radius: 7px;
+  font-size: clamp(0.65rem, 1.2vw, 0.9rem);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.pesquisa input {
+  padding: 6px 12px;
+  width: 100%;
+  background: none;
+  border: 2px solid white;
+  border-radius: 7px;
+  color: white;
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pesquisa button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.pesquisa button img {
+  width: clamp(20px, 3vw, 30px);
+}
+
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(35px, 5vw, 50px);
+  height: clamp(35px, 5vw, 50px);
+  border-radius: 50%;
+  border: 2px solid black;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.login img {
+  width: 100%;
+}
+
+.valor p {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: bold;
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+  white-space: nowrap;
+}
+
+/* ── LAYOUT PRINCIPAL ── */
+.container {
+  display: flex;
+  margin: 5px;
+  gap: 10px;
+}
+
+/* ── ASIDE ── */
+aside {
+  width: 15%;
+  background-color: #1a1a1a;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.card-produto {
+  background-color: #262626;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.card-produto p {
+  font-weight: bold;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.card-produto span {
+  font-size: 0.8rem;
+  color: #ffcccc;
+}
+
+/* ── MAIN ── */
+main {
+  flex: 1;
+  background-color: #1a1a1a;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.produtos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.card-main {
+  background-color: #262626;
+  border: 2px solid black;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-main img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.card-main p {
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.card-main span {
+  color: #ffcccc;
+  font-size: 0.8rem;
+}
+
+.btn-carrinho {
+  width: 100%;
+  padding: 5px;
+  background-color: #b80404;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-carrinho:hover {
+  background-color: #8a0303;
+}
+
+/* ── TABLET (max 900px) ── */
+@media (max-width: 900px) {
+  aside {
+    width: 12%;
+  }
+}
+
+/* ── MOBILE (max 600px) ── */
+@media (max-width: 600px) {
+  header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pesquisa {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .pesquisa select,
+  .pesquisa input {
+    width: 100%;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  aside {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .card-produto {
+    min-width: 120px;
+  }
+
+  .produtos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
