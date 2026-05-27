@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require 'conexao.php';
 $categoria = $_POST['categoria'];
 $nome      = $_POST['nome'];
@@ -55,7 +60,7 @@ switch ($categoria) {
         $potencia = $_POST['potencia'];
         $sql  = "INSERT INTO Fontes (nome, marca, potencia, preco, foto, descricao) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssiдss", $nome, $marca, $potencia, $preco, $foto, $descricao);
+        $stmt->bind_param("ssidss", $nome, $marca, $potencia, $preco, $foto, $descricao);
         break;
 
     case 'gabinete':

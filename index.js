@@ -1,19 +1,34 @@
-// buscar dados no banco
+//ler banco
 let dadosOriginais = [];
-async function carregarDados() {
-  const resposta = await fetch("back/listar.php");
-  dadosOriginais = await resposta.json();
 
-  montarCards(dadosOriginais);
+async function carregarDados() {
+  var tabela = "Processadores";
+
+  var url = "back/listar.php?tabela=" + tabela;
+
+  console.log("URL completa:", url); // Deve mostrar: back/listar.php?tabela=Processadores
+
+  var resposta = await fetch(url);
+  console.log("Status:", resposta.status);
+
+  var dados = await resposta.json();
+
+  if (Array.isArray(dados)) {
+    montarCards(dados);
+  } else {
+    console.log("Erro:", dados);
+  }
 }
+
 function montarCards(listaDados) {
   const container = document.querySelector(".produtos-grid");
-
   container.innerHTML = "";
-  if (listaDados.length === 0) {
-    container.innerHTML = "<p>Erro</p>";
+
+  if (!listaDados || listaDados.length === 0) {
+    container.innerHTML = "<p>Nenhum produto encontrado.</p>";
     return;
   }
+
   listaDados.forEach((item) => {
     const card = document.createElement("div");
     card.classList.add("card-main");
@@ -22,26 +37,43 @@ function montarCards(listaDados) {
     titulo.textContent = item.nome;
 
     const texto = document.createElement("span");
-    texto.textContent = item.email;
+    texto.textContent = `R$ ${parseFloat(item.preco).toFixed(2)}`;
 
+    //cart
     const botao = document.createElement("button");
     botao.classList.add("btn-carrinho");
     botao.textContent = "+ Adicionar";
 
     botao.onclick = () => {
-      const url = `front/atualizar.html?id=${item.id}&nome=${encodeURIComponent(item.nome)}&email=${encodeURIComponent(item.email)}`;
-
-      window.location.href = url;
+      alert(`${item.nome} adicionado ao carrinho!`);
     };
 
+    //delete
     const btnDeletar = document.createElement("button");
+    btnDeletar.classList.add("btn-delet");
     btnDeletar.textContent = "- Deletar";
-    btnDeletar.onclick = async () => {
-      if (confirm(`Deseja deletar ${item.nome}?`)) {
-      }
+
+    btnDeletar.onclick = () => {
+      alert(`${item.nome} adicionado ao carrinho!`);
     };
 
-    card.append(titulo, texto, botao, btnDeletar);
+    //edit
+    const btnEditar = document.createElement("button");
+    btnEditar.classList.add("btn-edit");
+    btnEditar.textContent = "Editar";
+
+    btnEditar.onclick = () => {
+      alert(`${item.nome} adicionado ao carrinho!`);
+    };
+
+    //pegar img
+    const imagem = document.createElement("img");
+    imagem.src = item.foto ? item.foto : "img/logo.png";
+    imagem.alt = item.nome;
+
+    card.append(imagem, titulo, texto, botao, btnDeletar, btnEditar);
+    container.appendChild(card);
   });
 }
+
 carregarDados();
