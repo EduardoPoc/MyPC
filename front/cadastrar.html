@@ -1,25 +1,79 @@
-<div class="form-container">
-  <h2>Cadastrar</h2>
-  <form id="form-cadastro" action="../back/cadastro.php" method="post">
-    <div class="input-group">
-      <label for="nome">Nome: </label>
-      <input type="text" nome="nome" id="nome" required />
-    </div>
-
-    <div class="input-group">
-      <label for="email">Email: </label>
-      <input type="email" nome="email" id="email" required />
-    </div>
-
-    <div class="form-actions">
-      <button type="submit" class="btn-primary">Salvar</button>
-      <button
-        class="btn-secudary"
-        onclick="window.location.href = '../index.html'"
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="icon" type="image/x-icon" href="img/logo.png" />
+    <title>Cadastrar Componente</title>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Cadastrar Componente</h2>
+      <form
+        action="../back/cadastro.php"
+        method="post"
+        enctype="multipart/form-data"
       >
-        Voltar
-      </button>
+        <div class="input-group">
+          <label for="categoria">Categoria:</label>
+          <select
+            name="categoria"
+            id="categoria"
+            onchange="mudarCampos()"
+            required
+          >
+            <option value="">Selecione...</option>
+            <option value="processador">Processador</option>
+            <option value="placamae">Placa Mãe</option>
+            <option value="ram">RAM</option>
+            <option value="gpu">GPU</option>
+            <option value="ssd">SSD</option>
+            <option value="fonte">Fonte</option>
+            <option value="gabinete">Gabinete</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="nome">Nome:</label>
+          <input type="text" name="nome" id="nome" required />
+        </div>
+
+        <div class="input-group">
+          <label for="preco">Preço:</label>
+          <input type="number" name="preco" id="preco" step="0.01" required />
+        </div>
+
+        <div id="campos-extras"></div>
+
+        <div class="input-group">
+          <label for="foto">Foto:</label>
+          <input type="file" name="foto" id="foto" accept="image/*" required />
+        </div>
+
+        <div class="input-group">
+          <label for="descricao">Descrição:</label>
+          <textarea
+            name="descricao"
+            id="descricao"
+            rows="3"
+            maxlength="1000"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Salvar</button>
+          <button
+            type="button"
+            class="btn-secondary"
+            onclick="window.location.href = '../index.html'"
+          >
+            Voltar
+          </button>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
-<script src="cadastrar.js"></script>
+
+    <script src="cadastrar.js"></script>
+  </body>
+</html>

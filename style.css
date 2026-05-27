@@ -9,7 +9,7 @@ body {
   color: white;
 }
 
-/* ── HEADER ── */
+/*  HEADER  */
 header {
   background-color: #b80404;
   font-family: Arial, sans-serif;
@@ -54,7 +54,7 @@ header {
   cursor: pointer;
 }
 
-/* ── NAV ── */
+/*  NAV  */
 nav {
   margin: 5px;
   background-color: #b80404;
@@ -134,14 +134,14 @@ input::placeholder {
   white-space: nowrap;
 }
 
-/* ── LAYOUT PRINCIPAL ── */
+/* LAYOUT PRINCIPAL */
 .container {
   display: flex;
   margin: 5px;
   gap: 10px;
 }
 
-/* ── ASIDE ── */
+/*  ASIDE  */
 aside {
   width: 15%;
   background-color: #1a1a1a;
@@ -159,6 +159,9 @@ aside {
   border: 2px solid black;
   border-radius: 8px;
   padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .card-produto p {
@@ -171,8 +174,15 @@ aside {
   font-size: 0.8rem;
   color: #ffcccc;
 }
+.card-produto img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-left: auto;
+}
 
-/* ── MAIN ── */
+/*  MAIN  */
 main {
   flex: 1;
   background-color: #1a1a1a;
@@ -230,14 +240,100 @@ main {
   background-color: #8a0303;
 }
 
-/* ── TABLET (max 900px) ── */
+/* ── FORM ── */
+.form-container {
+  width: 400px;
+  margin: 40px auto;
+  background-color: #1a1a1a;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  color: #ffcccc;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  padding: 8px 10px;
+  background-color: #262626;
+  color: white;
+  border: 2px solid #444;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #b80404;
+}
+
+.input-group textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-primary {
+  flex: 1;
+  padding: 8px;
+  background-color: #b80404;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #8a0303;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 8px;
+  background-color: #262626;
+  color: white;
+  border: 2px solid #444;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  border-color: #b80404;
+}
+
+/*  TABLET (max 900px)  */
 @media (max-width: 900px) {
   aside {
     width: 12%;
   }
 }
 
-/* ── MOBILE (max 600px) ── */
+/*  MOBILE (max 600px)  */
 @media (max-width: 600px) {
   header {
     flex-wrap: wrap;
@@ -275,5 +371,9 @@ main {
 
   .produtos-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  .form-container {
+    width: 95%;
+    margin: 20px auto;
   }
 }
