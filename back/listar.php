@@ -21,9 +21,19 @@ if (!in_array($tabelaLower, $tabelasPermitidas)) {
 }
 
 $tabelaNormalizada = ucfirst($tabelaLower);
+$id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
+if ($id) {
+    $sql = "SELECT * FROM " . $conn->real_escape_string($tabelaNormalizada) . " WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+} else {
+    $sql = "SELECT * FROM " . $conn->real_escape_string($tabelaNormalizada);
+    $resultado = $conn->query($sql);
+}
 $sql = "SELECT * FROM " . $conn->real_escape_string($tabelaNormalizada);
-$resultado = $conn->query($sql);
 
 if (!$resultado) {
     http_response_code(500);

@@ -10,6 +10,7 @@
   <body>
     <div class="form-container">
       <h2>Cadastrar Componente</h2>
+
       <form
         action="../back/cadastro.php"
         method="post"
@@ -60,6 +61,9 @@
             maxlength="1000"
           ></textarea>
         </div>
+
+        <input type="hidden" name="id" id="input-id" value="" />
+        <input type="hidden" name="foto_atual" id="foto-atual" value="" />
 
         <div class="form-actions">
           <button type="submit" class="btn-primary">Salvar</button>
