@@ -45,11 +45,36 @@ if ($tabelaLower === 'placamae') {
 
 $tabelaSegura = $conn->real_escape_string($tabelaNormalizada);
 
+$busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
+$buscaSegura = $conn->real_escape_string($busca);
+
+$soquete = isset($_GET['soquete']) ? $conn->real_escape_string(trim($_GET['soquete'])) : '';
+$ddr = isset($_GET['ddr']) ? $conn->real_escape_string(trim($_GET['ddr'])) : '';
+
 if ($id !== null) {
-    $sql = "SELECT * FROM " . $tabelaSegura . " WHERE id = " . $id . " ORDER BY " . $direcaoOrdem . ";";
+    $sql = "SELECT * FROM " . $tabelaSegura . " WHERE id = " . $id;
 } else {
-    $sql = "SELECT * FROM " . $tabelaSegura . " ORDER BY " . $direcaoOrdem . ";";
+    $sql = "SELECT * FROM " . $tabelaSegura;
+    $filtros = [];
+    
+    if (!empty($buscaSegura)) {
+        $filtros[] = "LOWER(nome) LIKE LOWER('%" . $buscaSegura . "%')";
+    }
+    
+    if (!empty($soquete) && in_array($tabelaLower, ['placamae', 'processadores'])) {
+        $filtros[] = "soquete = '" . $soquete . "'";
+    }
+
+    if (!empty($ddr) && in_array($tabelaLower, ['placamae', 'ram'])) {
+        $filtros[] = "ddr = '" . $ddr . "'";
+    }
+
+    if (count($filtros) > 0) {
+        $sql .= " WHERE " . implode(" AND ", $filtros);
+    }
 }
+
+$sql .= " ORDER BY " . $direcaoOrdem . ";";
 
 $resultado = $conn->query($sql);
 

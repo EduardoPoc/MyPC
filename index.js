@@ -10,6 +10,9 @@ let tabela = [
   "Fontes",
   "Gabinetes",
 ];
+let filtroSoquete = "";
+let filtroDDR = "";
+
 async function carregarDados() {
   const container = document.querySelector(".produtos-grid");
   console.log("cards antes:", container.children.length);
@@ -18,17 +21,22 @@ async function carregarDados() {
   const selectFiltro = document.querySelector(".selectFiltro");
   const opcaoSelecionada = selectFiltro.value;
 
+  const inputBusca = document.querySelector("#inputBusca");
+  const termoBusca = inputBusca ? encodeURIComponent(inputBusca.value) : "";
+
   let url = "";
   if (
     opcaoSelecionada === "menor" ||
     opcaoSelecionada === "maior" ||
     opcaoSelecionada === "alfabeto"
   ) {
-    url = `back/listar.php?tabela=${tabela[paginaAtual]}&ordem=${opcaoSelecionada}`;
+    url = `back/listar.php?tabela=${tabela[paginaAtual]}&ordem=${opcaoSelecionada}&busca=${termoBusca}`;
   } else {
-    url = `back/listar.php?tabela=${tabela[paginaAtual]}&ordem=relevancia`;
+    url = `back/listar.php?tabela=${tabela[paginaAtual]}&ordem=relevancia&busca=${termoBusca}`;
   }
 
+  if (filtroSoquete) url += `&soquete=${encodeURIComponent(filtroSoquete)}`;
+  if (filtroDDR) url += `&ddr=${encodeURIComponent(filtroDDR)}`;
   let resposta = await fetch(url);
 
   let dados = await resposta.json();
@@ -38,6 +46,28 @@ async function carregarDados() {
     atualizarBotoesPagina();
   } else {
     console.log("Erro:", dados);
+  }
+
+  const btnLupa = document.getElementById("lupa");
+  if (btnLupa) {
+    btnLupa.addEventListener("click", () => {
+      carregarDados();
+    });
+  }
+
+  const inputBuscaElemento = document.getElementById("inputBusca");
+  if (inputBuscaElemento) {
+    inputBuscaElemento.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        carregarDados();
+      }
+    });
+  }
+  const selectFiltroElemento = document.querySelector(".selectFiltro");
+  if (selectFiltroElemento) {
+    selectFiltroElemento.addEventListener("change", () => {
+      carregarDados();
+    });
   }
 }
 // cards ---------------------------------------------------------------------------------------------------------------
@@ -63,31 +93,65 @@ function montarCards(listaDados, tabela) {
     //cart
     const botao = document.createElement("button");
     botao.classList.add("btn-carrinho");
-    botao.textContent = "+ Adicionar";
+
+    const img = document.createElement("img");
+    img.setAttribute("src", "img/cart.png");
+    img.style.width = "20px";
+    img.style.height = "13px";
+
+    botao.append(img);
 
     //btn
     botao.onclick = () => {
       const container = document.querySelector("#carrinho");
       const itens = container.querySelectorAll(".card-produto");
-      let jaExiste = false;
+      let categoriaJaExiste = false;
 
-      //verifica existencia
       itens.forEach((div) => {
-        if (div.querySelector("p").textContent === `1x ${item.nome}`) {
-          return (jaExiste = true);
+        if (div.dataset.categoria === tabela) {
+          categoriaJaExiste = true;
         }
       });
 
-      if (jaExiste) {
-        alert(`O item "${item.nome}" já está no carrinho!`);
+      if (categoriaJaExiste) {
+        alert(
+          `Você já adicionou um item da categoria "${tabela}" ao carrinho! Remova o atual antes de adicionar outro.`,
+        );
         return;
       }
-      // adiciona na lista
+
       const card = document.createElement("div");
       card.classList.add("card-produto");
 
-      const titulo = document.createElement("p");
-      titulo.textContent = `1x ${item.nome}`;
+      card.dataset.categoria = tabela;
+      card.dataset.id = item.id;
+
+      if (item.soquete) card.dataset.soquete = item.soquete;
+      if (item.ddr) card.dataset.ddr = item.ddr;
+
+      const cart_delete = document.createElement("button");
+      cart_delete.addEventListener("click", () => {
+        card.remove();
+        atualizarFiltrosCarrinho();
+        total();
+        carregarDados();
+      });
+      const imgCart_D = document.createElement("img");
+      imgCart_D.setAttribute("src", "img/lixo.png");
+      imgCart_D.style.width = "20px";
+      imgCart_D.style.height = "20px";
+      imgCart_D.style.cursor = "pointer";
+
+      cart_delete.append(imgCart_D);
+      cart_delete.style.background = "none";
+
+      cart_delete.addEventListener("click", () => {
+        card.remove();
+        total();
+      });
+
+      const nomeItem = document.createElement("p");
+      nomeItem.textContent = `1x ${item.nome}`;
 
       const texto = document.createElement("span");
       texto.textContent = `R$ ${parseFloat(item.preco).toFixed(2)}`;
@@ -96,14 +160,24 @@ function montarCards(listaDados, tabela) {
       imagem.src = item.foto ? item.foto : "img/logo.png";
       imagem.alt = item.nome;
 
-      card.append(titulo, texto, imagem);
+      card.append(cart_delete, nomeItem, texto, imagem);
       container.appendChild(card);
+
+      atualizarFiltrosCarrinho();
+      total();
+      carregarDados();
     };
     //-------------------------------------------------------------------------
     //delete
     const btnDeletar = document.createElement("button");
     btnDeletar.classList.add("btn-delet");
-    btnDeletar.textContent = "- Deletar";
+
+    const imgD = document.createElement("img");
+    imgD.setAttribute("src", "img/delete.png");
+    imgD.style.width = "20px";
+    imgD.style.height = "15px";
+
+    btnDeletar.append(imgD);
 
     btnDeletar.onclick = () => {
       if (confirm(`Deseja realmente deletar o item ${item.nome}?`)) {
@@ -124,7 +198,13 @@ function montarCards(listaDados, tabela) {
     //edit
     const btnEditar = document.createElement("button");
     btnEditar.classList.add("btn-edit");
-    btnEditar.textContent = "Editar";
+
+    const imgE = document.createElement("img");
+    imgE.setAttribute("src", "img/edit.png");
+    imgE.style.width = "20px";
+    imgE.style.height = "14px";
+
+    btnEditar.append(imgE);
 
     btnEditar.onclick = () => {
       window.location.href = `front/cadastrar.html?id=${item.id}&categoria=${tabela.toLowerCase()}`;
@@ -161,8 +241,105 @@ btnMore.addEventListener("click", () => {
 });
 // save button -----------------------------------------------------------------
 const btnSalvar = document.getElementById("salvar");
-btnSalvar.addEventListener("click", () => {
-  alert("salvo"); //add real function
+
+btnSalvar.addEventListener("click", async () => {
+  try {
+    const containerCarrinho = document.querySelector("#carrinho");
+    const itensCarrinho = containerCarrinho.querySelectorAll(".card-produto");
+    const configSalva = localStorage.getItem("mypc_saved_ids");
+
+    if (itensCarrinho.length > 0) {
+      let configIds = [];
+
+      itensCarrinho.forEach((card) => {
+        configIds.push({
+          id: card.dataset.id,
+          categoria: card.dataset.categoria,
+        });
+      });
+
+      localStorage.setItem("mypc_saved_ids", JSON.stringify(configIds));
+
+      if (configIds.length >= 7) {
+        alert("Sua configuração COMPLETA foi salva com sucesso!");
+      } else {
+        alert(
+          "Configuração salva com sucesso! (Faltam peças para um PC completo).",
+        );
+      }
+    } else if (itensCarrinho.length === 0 && configSalva) {
+      const configuracao = JSON.parse(configSalva);
+
+      if (!Array.isArray(configuracao) || configuracao.length === 0) {
+        alert("A configuração salva está vazia ou corrompida.");
+        return;
+      }
+
+      containerCarrinho.innerHTML = "";
+
+      for (const itemSalvo of configuracao) {
+        const resposta = await fetch(
+          `back/listar.php?tabela=${itemSalvo.categoria}&id=${itemSalvo.id}`,
+        );
+        const dados = await resposta.json();
+
+        if (dados && dados.length > 0) {
+          const item = dados[0];
+
+          const card = document.createElement("div");
+          card.classList.add("card-produto");
+          card.dataset.categoria = itemSalvo.categoria;
+          card.dataset.id = item.id;
+
+          if (item.soquete) card.dataset.soquete = item.soquete;
+          if (item.ddr) card.dataset.ddr = item.ddr;
+
+          const cart_delete = document.createElement("button");
+          const imgCart_D = document.createElement("img");
+          imgCart_D.setAttribute("src", "img/lixo.png");
+          imgCart_D.style.width = "20px";
+          imgCart_D.style.height = "20px";
+          imgCart_D.style.cursor = "pointer";
+
+          cart_delete.append(imgCart_D);
+          cart_delete.style.background = "none";
+
+          cart_delete.addEventListener("click", () => {
+            card.remove();
+            atualizarFiltrosCarrinho();
+            total();
+            carregarDados();
+          });
+
+          const nomeItem = document.createElement("p");
+          nomeItem.textContent = `1x ${item.nome}`;
+
+          const texto = document.createElement("span");
+          texto.textContent = `R$ ${parseFloat(item.preco).toFixed(2)}`;
+
+          const imagem = document.createElement("img");
+          imagem.src = item.foto ? item.foto : "img/logo.png";
+          imagem.alt = item.nome;
+
+          card.append(cart_delete, nomeItem, texto, imagem);
+          containerCarrinho.appendChild(card);
+        }
+      }
+
+      atualizarFiltrosCarrinho();
+      total();
+      carregarDados();
+
+      alert("Configuração carregada com sucesso e com os preços atualizados!");
+    } else {
+      alert(
+        "O carrinho está vazio e não há nenhuma configuração salva para carregar.",
+      );
+    }
+  } catch (erro) {
+    console.error("Erro ao gerenciar a configuração:", erro);
+    alert("Ocorreu um erro ao salvar ou carregar.");
+  }
 });
 //setings button ===================================================================
 const btnMudar = document.getElementById("settings");
@@ -202,4 +379,35 @@ function atualizarBotoesPagina() {
   } else {
     btnAvancar.classList.remove("ocultar");
   }
+}
+// carrinho valor ---------------------------------------------------
+function total() {
+  const containerCarrinho = document.querySelector("#carrinho");
+  const itens = containerCarrinho.querySelectorAll(".card-produto");
+  let total = 0;
+
+  itens.forEach((div) => {
+    const spanPreco = div.querySelector("span");
+    if (spanPreco) {
+      const precoTexto = spanPreco.textContent.replace("R$", "").trim();
+      total += parseFloat(precoTexto);
+    }
+  });
+
+  const pValor = document.querySelector(".valor p");
+  if (pValor) {
+    pValor.textContent = `R$ ${total.toFixed(2).replace(".", ",")}`;
+  }
+}
+// compatibilidade dos produtos
+function atualizarFiltrosCarrinho() {
+  filtroSoquete = "";
+  filtroDDR = "";
+
+  const itensCarrinho = document.querySelectorAll("#carrinho .card-produto");
+
+  itensCarrinho.forEach((card) => {
+    if (card.dataset.soquete) filtroSoquete = card.dataset.soquete;
+    if (card.dataset.ddr) filtroDDR = card.dataset.ddr;
+  });
 }

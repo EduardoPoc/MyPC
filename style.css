@@ -162,12 +162,21 @@ aside {
   display: flex;
   align-items: center;
   gap: 8px;
+  overflow: hidden;
 }
 
+.card-produto div {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
 .card-produto p {
   font-weight: bold;
   font-size: 0.85rem;
   margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-produto span {
@@ -370,13 +379,23 @@ main {
   }
 
   .container {
-    flex-direction: column;
+    display: flex;
+    margin: 5px auto; /* centraliza */
+    max-width: 1400px; /* Impede que fique gigante em telas de cinema */
+    gap: 15px;
+    padding: 0 10px;
   }
 
   aside {
-    width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
+    width: 20%; /* Aumentamos um pouco o espaço do carrinho */
+    min-width: 250px; /* Garante que o carrinho não fique muito estreito */
+    background-color: #1a1a1a;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .card-produto {
@@ -393,4 +412,7 @@ main {
 }
 .ocultar {
   display: none;
+}
+button:hover {
+  cursor: pointer;
 }

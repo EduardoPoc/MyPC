@@ -77,14 +77,19 @@ async function atualizar() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
   if (id) {
-    document.querySelector("form").action = `../back/cadastro.php?id=${id}`;
+    const inputId = document.getElementById("input-id");
+    if (inputId) {
+      inputId.value = id;
+    }
   }
+
   let categoria = params.get("categoria");
 
   if (!id || !categoria) return;
 
   const tabelaMap = {
     processador: "Processadores",
+    processadores: "Processadores",
     placamae: "PlacaMae",
     ram: "Ram",
     gpu: "GPU",
@@ -93,9 +98,10 @@ async function atualizar() {
     gabinete: "Gabinetes",
   };
 
-  const categoriaChave = tabelaMap[categoria.toLowerCase()]
-    ? categoria.toLowerCase()
-    : categoria;
+  let categoriaChave = categoria.toLowerCase();
+  if (categoriaChave === "processadores") {
+    categoriaChave = "processador";
+  }
 
   const tabelaNome = tabelaMap[categoriaChave];
 
