@@ -1,4 +1,5 @@
 <?php
+
 include 'conexao.php';
 
 if (isset($_GET['id']) && isset($_GET['tabela'])) {
@@ -6,13 +7,11 @@ if (isset($_GET['id']) && isset($_GET['tabela'])) {
     $table = $_GET['tabela'];
     $foto  = $_GET['foto'] ?? '';
 
-    // deleta do banco
     $sql  = "DELETE FROM $table WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {
-        // verifica se mais algum produto usa a mesma foto
         if ($foto) {
             $sql2  = "SELECT COUNT(*) as total FROM $table WHERE foto = ?";
             $stmt2 = $conn->prepare($sql2);

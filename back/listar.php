@@ -9,10 +9,24 @@ header('Content-Type: application/json; charset=utf-8');
 include "conexao.php";
 
 $tabela = isset($_GET['tabela']) ? trim($_GET['tabela']) : '';
-
 $tabelasPermitidas = ['fontes', 'gabinetes', 'gpu', 'placamae', 'processadores', 'ram', 'ssd'];
-
 $tabelaLower = mb_strtolower($tabela, 'UTF-8');
+
+$ordemRecebida = isset($_GET['ordem']) ? $_GET['ordem'] : 'relevancia';
+switch ($ordemRecebida) {
+    case 'menor':
+        $direcaoOrdem = 'preco ASC';
+        break;
+    case 'maior':
+        $direcaoOrdem = 'preco DESC';
+        break;
+    case 'alfabeto':
+        $direcaoOrdem = 'nome ASC';
+        break;
+    default:
+        $direcaoOrdem = "id ASC";
+        break;
+}
 
 if (!in_array($tabelaLower, $tabelasPermitidas)) {
     http_response_code(400);
@@ -23,17 +37,21 @@ if (!in_array($tabelaLower, $tabelasPermitidas)) {
 $tabelaNormalizada = ucfirst($tabelaLower);
 $id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
-if ($id) {
-    $sql = "SELECT * FROM " . $conn->real_escape_string($tabelaNormalizada) . " WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-} else {
-    $sql = "SELECT * FROM " . $conn->real_escape_string($tabelaNormalizada);
-    $resultado = $conn->query($sql);
+if ($tabelaLower === 'placamae') {
+    $tabelaNormalizada = 'PlacaMae';
+} elseif ($tabelaLower === 'gpu') {
+    $tabelaNormalizada = 'GPU';
 }
-$sql = "SELECT * FROM " . $conn->real_escape_string($tabelaNormalizada);
+
+$tabelaSegura = $conn->real_escape_string($tabelaNormalizada);
+
+if ($id !== null) {
+    $sql = "SELECT * FROM " . $tabelaSegura . " WHERE id = " . $id . " ORDER BY " . $direcaoOrdem . ";";
+} else {
+    $sql = "SELECT * FROM " . $tabelaSegura . " ORDER BY " . $direcaoOrdem . ";";
+}
+
+$resultado = $conn->query($sql);
 
 if (!$resultado) {
     http_response_code(500);

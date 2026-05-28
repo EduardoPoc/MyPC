@@ -330,14 +330,24 @@ main {
   border-color: #b80404;
 }
 
-/*  TABLET  */
+.mudar-pagina {
+  margin: 1px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.mudar-pagina button {
+  width: clamp(80px, 25%, 150px);
+}
+
+/*  adaptatividade  */
 @media (max-width: 950px) {
   aside {
     width: 12%;
   }
 }
 
-/*  MOBILE (max 600px)  */
 @media (max-width: 900px) {
   header {
     flex-wrap: wrap;
@@ -380,4 +390,7 @@ main {
     width: 95%;
     margin: 20px auto;
   }
+}
+.ocultar {
+  display: none;
 }
